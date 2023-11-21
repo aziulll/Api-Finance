@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Receita;
+use App\Models\User;
 
 class ReceitaController extends Controller
 {
@@ -18,10 +19,18 @@ class ReceitaController extends Controller
         return response()->json(['receitas' => $receitas]);
     }
 
-    public function sum()
+    public function sum($userId)
     {
-        $somaReceitas = Receita::sum('valor');
-        return $somaReceitas;
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
+
+        $somaReceitas = $user->receitas()->sum('valor');
+
+        return response()->json( $somaReceitas);
+    
     }
 
     public function search(Request $request)

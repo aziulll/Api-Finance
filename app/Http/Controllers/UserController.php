@@ -10,54 +10,42 @@ class UserController extends Controller
 {
     public function getCountOfUsers()
     {
-        $count = User::count(); 
+        $count = User::count();
         return response()->json($count);
     }
     public function index()
     {
-       $users = User::orderBy("id","asc")->paginate(10);
+        $users = User::orderBy("id", "asc")->paginate(10);
 
-       return response()->json(['users' => $users]);
+        return response()->json(['users' => $users]);
 
+       
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+  
     public function create()
     {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
+    }
+
+
+
+
+    public function show($id)
+    { {
+
+            $user = User::find($id);
+
+
         
+                return response()->json($user);
+             
+        }
     }
-
-    /**
-     * Display the specified resource.
-     */
-
-
-public function show()
-{
-    // Verifica se o usuário está autenticado
-    if (Auth::check()) {
-        // Obtém o usuário autenticado
-        $user = Auth::user();
-
-        // Obtém o ID do usuário autenticado
-        $userId = $user->id;
-
-        return response()->json($user);
-    } else {
-        // O usuário não está autenticado
-        return response()->json(['message' => 'Usuário não autenticado'], 401);
-    }
-}
 
 
     /**
@@ -79,8 +67,4 @@ public function show()
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

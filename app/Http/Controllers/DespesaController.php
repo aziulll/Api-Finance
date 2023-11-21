@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Despesa;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-
+use App\Models\User;
 
 class DespesaController extends Controller
 {
@@ -17,12 +17,19 @@ class DespesaController extends Controller
         return response()->json($despesa);
         
     }
-    public function sum() 
+    public function sum($userId)
     {
-        $somaDespesas = Despesa::sum('valor');
-        return $somaDespesas;   
-    }
+        $user = User::find($userId);
 
+        if (!$user) {
+            return response()->json(['error' => 'Usuário não encontrado'], 404);
+        }
+
+        $somaReceitas = $user->despesas()->sum('valor');
+
+        return response()->json( $somaReceitas);
+    
+    }
     public function search(Request $request)
     {
         $termoDeBusca = $request->input('termo_de_busca');
