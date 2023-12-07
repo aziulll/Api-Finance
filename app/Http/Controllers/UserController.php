@@ -15,14 +15,12 @@ class UserController extends Controller
     }
     public function index()
     {
-        $users = User::orderBy("id", "asc")->paginate(10);
+        $users = User::All();
 
         return response()->json(['users' => $users]);
-
-       
     }
 
-  
+
     public function create()
     {
     }
@@ -36,15 +34,10 @@ class UserController extends Controller
 
 
     public function show($id)
-    { {
+    {
 
-            $user = User::find($id);
-
-
-        
-                return response()->json($user);
-             
-        }
+        $user = User::find($id);
+        return response()->json($user);
     }
 
 
@@ -56,12 +49,30 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   
     public function update(Request $request, string $id)
     {
-        //
+        
+        $user = User::findOrFail($id);
+    
+    
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'data_nascimento' => 'required|date',
+            'is_Adm' => 'required|boolean',
+        ]);
+    
+        
+        $user->update($request->only([
+            'name',
+            'email',
+            'data_nascimento',
+            'is_Adm',
+        ]));
+    
+        // Retornar uma resposta de sucesso
+        return response()->json(['message' => 'Usuário atualizado com sucesso']);
     }
 
     /**

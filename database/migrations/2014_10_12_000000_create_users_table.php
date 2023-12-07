@@ -6,17 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
+    /** 
      * Run the migrations.
-     */
+     */ 
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->date('data_nascimento');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('is_Adm');
+            $table->boolean('is_titular');
+            $table->unsignedBigInteger('conta_id');
             $table->rememberToken();
             $table->timestamps();
         }); 
